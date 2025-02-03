@@ -100,6 +100,7 @@
                 document.getElementById("createCharacterForm").reset();
                 document.getElementById("CreateCharacter").style.display = "none"; // Hide the Create Character tab
                 document.querySelector(".tablinks[onclick=\"openTab(event, 'CreateCharacter')\"]").style.display = "none"; // Hide the Create Character button
+                startTimer(); // Start the timer only after character creation
             } else {
                 alert("Por favor, insira um nome válido.");
             }
@@ -113,12 +114,12 @@
                 ageInSeconds = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
                 document.getElementById('characterInfo').innerText = `Nome: ${name}`;
                 document.getElementById('age').innerText = formatAge(ageInSeconds);
+                startTimer(); // Resume the timer on page load
             }
         }
 
         window.onload = () => {
             loadCharacter();
-            startTimer();
             document.getElementById("defaultOpen").click();
 
             const tabList = document.querySelector(".tab");
