@@ -6,6 +6,18 @@
     <title>RPG Skill Manager</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <style>
+        body {
+            display: flex;
+            flex-direction: row;
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+        .sidebar {
+            width: 200px;
+            border-left: 1px solid #ccc;
+            padding: 10px;
+        }
         .tab {
             display: flex;
             list-style-type: none;
@@ -41,18 +53,23 @@
     </style>
     <script>
         let timer;
-        let ageInDays = 0;
+        let ageInSeconds = 0;
+        const monthNames = ["Janus", "Februs", "Marus", "Aprilus", "Maia", "Junus", "Julus", "Augustus", "Septus", "Octus", "Novus", "Decus", "Ultimus"];
 
         function startTimer() {
             timer = setInterval(() => {
-                ageInDays++;
-                document.getElementById('age').innerText = formatAge(ageInDays);
-                localStorage.setItem('characterAge', ageInDays); // Save age to localStorage
+                ageInSeconds++;
+                document.getElementById('age').innerText = formatAge(ageInSeconds);
+                localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
             }, 1000);
         }
 
-        function formatAge(days) {
-            return `${days} dias`;
+        function formatAge(seconds) {
+            const days = Math.floor(seconds / 86400);
+            const months = Math.floor(days / 30) % 13;
+            const years = Math.floor(days / (30 * 13));
+            const remainingDays = days % 30;
+            return `${years} anos, ${monthNames[months]} (${months + 1}) meses e ${remainingDays} dias`;
         }
 
         function openTab(evt, tabName) {
@@ -77,10 +94,11 @@
 
             if (name) {
                 localStorage.setItem("characterName", name);
-                ageInDays = 0; // Reset age to 0
-                localStorage.setItem('characterAge', ageInDays); // Save age to localStorage
-                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInDays)}`;
+                ageInSeconds = 0; // Reset age to 0
+                localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
+                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
                 document.getElementById("createCharacterForm").reset();
+                document.getElementById("CreateCharacter").style.display = "none"; // Hide the Create Character tab
             } else {
                 alert("Por favor, insira um nome válido.");
             }
@@ -92,7 +110,7 @@
 
             if (name) {
                 document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(savedAge ?? 0)}`;
-                ageInDays = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
+                ageInSeconds = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
             }
         }
 
@@ -112,69 +130,74 @@
     </script>
 </head>
 <body>
-    <h1>Bem-vindo ao RPG Skill Manager</h1>
-    <ul class="tab">
-        <li><button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button></li>
-        <li><button class="tablinks" onclick="openTab(event, 'CreateCharacter')">Criar Personagem</button></li>
-        <li><button class="tablinks" onclick="openTab(event, 'Trabalhos')">Trabalhos</button></li>
-        <li><button class="tablinks" onclick="openTab(event, 'Missoes')">Missões</button></li>
-        <li><button class="tablinks" onclick="openTab(event, 'Viagem')">Viagem</button></li>
-        <li><button class="tablinks" onclick="openTab(event, 'Lazer')">Lazer</button></li>
-        <li><button class="tablinks" onclick="openTab(event, 'LocalAtual')">Local Atual</button></li>
-        <li><button class="tablinks" onclick="openTab(event, 'Conhecimento')">Conhecimento</button></li>
-        <li><button class="tablinks" onclick="openTab(event, 'Settings')">Configurações</button></li>
-    </ul>
+    <div class="main-content">
+        <ul class="tab">
+            <li><button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button></li>
+            <li><button class="tablinks" onclick="openTab(event, 'CreateCharacter')">Criar Personagem</button></li>
+            <li><button class="tablinks" onclick="openTab(event, 'Trabalhos')">Trabalhos</button></li>
+            <li><button class="tablinks" onclick="openTab(event, 'Missoes')">Missões</button></li>
+            <li><button class="tablinks" onclick="openTab(event, 'Viagem')">Viagem</button></li>
+            <li><button class="tablinks" onclick="openTab(event, 'Lazer')">Lazer</button></li>
+            <li><button class="tablinks" onclick="openTab(event, 'LocalAtual')">Local Atual</button></li>
+            <li><button class="tablinks" onclick="openTab(event, 'Conhecimento')">Conhecimento</button></li>
+            <li><button class="tablinks" onclick="openTab(event, 'Settings')">Configurações</button></li>
+        </ul>
 
-    <div id="Home" class="tabcontent">
-        <h3>Home</h3>
-        <p>Este é um exemplo de página inicial para o seu aplicativo RPG.</p>
-        <p>Idade do personagem: <span id="age">0 dias</span></p>
-        <p id="characterInfo"></p>
+        <div id="Home" class="tabcontent">
+            <h3>Home</h3>
+            <p>Este é um exemplo de página inicial para o seu aplicativo RPG.</p>
+            <p id="characterInfo">Nome: <span id="name"></span>, Idade: <span id="age">0 dias</span></p>
+        </div>
+
+        <div id="CreateCharacter" class="tabcontent">
+            <h3>Criar Personagem</h3>
+            <form id="createCharacterForm" onsubmit="event.preventDefault(); saveCharacter();">
+                <label for="characterName">Nome:</label>
+                <input type="text" id="characterName" required>
+                <br>
+                <button type="submit">Criar Personagem</button>
+            </form>
+        </div>
+
+        <div id="Trabalhos" class="tabcontent">
+            <h3>Trabalhos</h3>
+            <p>Gerencie seus trabalhos aqui.</p>
+        </div>
+
+        <div id="Missoes" class="tabcontent">
+            <h3>Missões</h3>
+            <p>Gerencie suas missões aqui.</p>
+        </div>
+
+        <div id="Viagem" class="tabcontent">
+            <h3>Viagem</h3>
+            <p>Gerencie suas viagens aqui.</p>
+        </div>
+
+        <div id="Lazer" class="tabcontent">
+            <h3>Lazer</h3>
+            <p>Gerencie suas atividades de lazer aqui.</p>
+        </div>
+
+        <div id="LocalAtual" class="tabcontent">
+            <h3>Local Atual</h3>
+            <p>Gerencie seu local atual aqui.</p>
+        </div>
+
+        <div id="Conhecimento" class="tabcontent">
+            <h3>Conhecimento</h3>
+            <p>Gerencie seus conhecimentos aqui.</p>
+        </div>
+
+        <div id="Settings" class="tabcontent">
+            <h3>Configurações</h3>
+            <p>Ajuste suas configurações aqui.</p>
+        </div>
     </div>
 
-    <div id="CreateCharacter" class="tabcontent">
-        <h3>Criar Personagem</h3>
-        <form id="createCharacterForm" onsubmit="event.preventDefault(); saveCharacter();">
-            <label for="characterName">Nome:</label>
-            <input type="text" id="characterName" required>
-            <br>
-            <button type="submit">Criar Personagem</button>
-        </form>
-    </div>
-
-    <div id="Trabalhos" class="tabcontent">
-        <h3>Trabalhos</h3>
-        <p>Gerencie seus trabalhos aqui.</p>
-    </div>
-
-    <div id="Missoes" class="tabcontent">
-        <h3>Missões</h3>
-        <p>Gerencie suas missões aqui.</p>
-    </div>
-
-    <div id="Viagem" class="tabcontent">
-        <h3>Viagem</h3>
-        <p>Gerencie suas viagens aqui.</p>
-    </div>
-
-    <div id="Lazer" class="tabcontent">
-        <h3>Lazer</h3>
-        <p>Gerencie suas atividades de lazer aqui.</p>
-    </div>
-
-    <div id="LocalAtual" class="tabcontent">
-        <h3>Local Atual</h3>
-        <p>Gerencie seu local atual aqui.</p>
-    </div>
-
-    <div id="Conhecimento" class="tabcontent">
-        <h3>Conhecimento</h3>
-        <p>Gerencie seus conhecimentos aqui.</p>
-    </div>
-
-    <div id="Settings" class="tabcontent">
-        <h3>Configurações</h3>
-        <p>Ajuste suas configurações aqui.</p>
+    <div class="sidebar">
+        <h3>Funções</h3>
+        <p>Será implementado</p>
     </div>
 </body>
 </html>
