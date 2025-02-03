@@ -4,6 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPG Skill Manager</title>
+    <style>
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
     <script>
         let timer;
         let seconds = 0;
@@ -22,12 +54,54 @@
             return `${hrs}:${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        window.onload = startTimer;
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+
+            // Hide all tab contents
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Remove the active class from all tab buttons
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab content and add the active class to the button
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        window.onload = () => {
+            startTimer();
+            document.getElementById("defaultOpen").click(); // Open default tab
+        };
     </script>
 </head>
 <body>
     <h1>Bem-vindo ao RPG Skill Manager</h1>
-    <p>Este é um exemplo de página inicial para o seu aplicativo RPG.</p>
-    <p>Tempo decorrido: <span id="timer">0:00:00</span></p>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button>
+        <button class="tablinks" onclick="openTab(event, 'Skills')">Skills</button>
+        <button class="tablinks" onclick="openTab(event, 'Settings')">Settings</button>
+    </div>
+
+    <div id="Home" class="tabcontent">
+        <h3>Home</h3>
+        <p>Este é um exemplo de página inicial para o seu aplicativo RPG.</p>
+        <p>Tempo decorrido: <span id="timer">0:00:00</span></p>
+    </div>
+
+    <div id="Skills" class="tabcontent">
+        <h3>Skills</h3>
+        <p>Gerencie suas habilidades aqui.</p>
+    </div>
+
+    <div id="Settings" class="tabcontent">
+        <h3>Settings</h3>
+        <p>Ajuste suas configurações aqui.</p>
+    </div>
 </body>
 </html>
