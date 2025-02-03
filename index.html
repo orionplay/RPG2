@@ -41,17 +41,17 @@
     </style>
     <script>
         let timer;
-        let ageInSeconds = 0;
+        let ageInDays = 0;
 
         function startTimer() {
             timer = setInterval(() => {
-                ageInSeconds++;
-                document.getElementById('age').innerText = formatAge(ageInSeconds);
+                ageInDays++;
+                document.getElementById('age').innerText = formatAge(ageInDays);
+                localStorage.setItem('characterAge', ageInDays); // Save age to localStorage
             }, 1000);
         }
 
-        function formatAge(seconds) {
-            const days = seconds;
+        function formatAge(days) {
             return `${days} dias`;
         }
 
@@ -77,8 +77,9 @@
 
             if (name) {
                 localStorage.setItem("characterName", name);
-                ageInSeconds = 0;
-                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
+                ageInDays = 0; // Reset age to 0
+                localStorage.setItem('characterAge', ageInDays); // Save age to localStorage
+                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInDays)}`;
                 document.getElementById("createCharacterForm").reset();
             } else {
                 alert("Por favor, insira um nome válido.");
@@ -87,16 +88,18 @@
 
         function loadCharacter() {
             const name = localStorage.getItem("characterName");
+            const savedAge = localStorage.getItem("characterAge");
 
             if (name) {
-                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
+                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(savedAge ?? 0)}`;
+                ageInDays = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
             }
         }
 
         window.onload = () => {
+            loadCharacter();
             startTimer();
             document.getElementById("defaultOpen").click();
-            loadCharacter();
 
             const tabList = document.querySelector(".tab");
             new Sortable(tabList, {
