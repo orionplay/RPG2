@@ -4,9 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPG Skill Manager</title>
+    <script>
+        let timer;
+        let seconds = 0;
+
+        function startTimer() {
+            timer = setInterval(() => {
+                seconds++;
+                document.getElementById('timer').innerText = formatTime(seconds);
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${hrs}:${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        window.onload = startTimer;
+    </script>
 </head>
 <body>
     <h1>Bem-vindo ao RPG Skill Manager</h1>
     <p>Este é um exemplo de página inicial para o seu aplicativo RPG.</p>
+    <p>Tempo decorrido: <span id="timer">0:00:00</span></p>
 </body>
 </html>
