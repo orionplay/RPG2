@@ -10,13 +10,13 @@
             display: flex;
             flex-direction: row;
         }
-        .main-content {
-            flex-grow: 1;
-        }
         .sidebar {
             width: 200px;
-            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
             padding: 10px;
+        }
+        .main-content {
+            flex-grow: 1;
         }
         .tab {
             display: flex;
@@ -59,7 +59,10 @@
         function startTimer() {
             timer = setInterval(() => {
                 ageInSeconds++;
-                document.getElementById('age').innerText = formatAge(ageInSeconds);
+                const characterName = localStorage.getItem("characterName");
+                if (characterName) {
+                    document.getElementById('characterInfo').innerText = `Nome: ${characterName}, Idade: ${formatAge(ageInSeconds)}`;
+                }
                 localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
             }, 1000);
         }
@@ -109,8 +112,8 @@
             const savedAge = localStorage.getItem("characterAge");
 
             if (name) {
-                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(savedAge ?? 0)}`;
                 ageInSeconds = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
+                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
             }
         }
 
@@ -130,6 +133,11 @@
     </script>
 </head>
 <body>
+    <div class="sidebar">
+        <h3>Funções</h3>
+        <p>Será implementado</p>
+    </div>
+
     <div class="main-content">
         <ul class="tab">
             <li><button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button></li>
@@ -193,11 +201,6 @@
             <h3>Configurações</h3>
             <p>Ajuste suas configurações aqui.</p>
         </div>
-    </div>
-
-    <div class="sidebar">
-        <h3>Funções</h3>
-        <p>Será implementado</p>
     </div>
 </body>
 </html>
