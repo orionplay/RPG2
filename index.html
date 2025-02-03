@@ -102,6 +102,7 @@
                 document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
                 document.getElementById("createCharacterForm").reset();
                 document.getElementById("CreateCharacter").style.display = "none"; // Hide the Create Character tab
+                document.querySelector(".tablinks[onclick=\"openTab(event, 'CreateCharacter')\"]").style.display = "none"; // Hide the Create Character button
             } else {
                 alert("Por favor, insira um nome válido.");
             }
