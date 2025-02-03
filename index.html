@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPG Skill Manager</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <style>
         .tab {
-            overflow: hidden;
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
             border: 1px solid #ccc;
             background-color: #f1f1f1;
         }
 
         .tab button {
             background-color: inherit;
-            float: left;
             border: none;
             outline: none;
             cursor: pointer;
@@ -48,7 +51,7 @@
         }
 
         function formatAge(seconds) {
-            const days = Math.floor(seconds / (3600 * 24));
+            const days = seconds;
             return `${days} dias`;
         }
 
@@ -94,21 +97,29 @@
             startTimer();
             document.getElementById("defaultOpen").click();
             loadCharacter();
+
+            const tabList = document.querySelector(".tab");
+            new Sortable(tabList, {
+                animation: 150,
+                onEnd: function (evt) {
+                    // Handle reordering logic here if needed
+                }
+            });
         };
     </script>
 </head>
 <body>
     <h1>Bem-vindo ao RPG Skill Manager</h1>
-    <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button>
-        <button class="tablinks" onclick="openTab(event, 'CreateCharacter')">Criar Personagem</button>
-        <button class="tablinks" onclick="openTab(event, 'Trabalhos')">Trabalhos</button>
-        <button class="tablinks" onclick="openTab(event, 'Missoes')">Missões</button>
-        <button class="tablinks" onclick="openTab(event, 'Viagem')">Viagem</button>
-        <button class="tablinks" onclick="openTab(event, 'Lazer')">Lazer</button>
-        <button class="tablinks" onclick="openTab(event, 'LocalAtual')">Local Atual</button>
-        <button class="tablinks" onclick="openTab(event, 'Settings')">Configurações</button>
-    </div>
+    <ul class="tab">
+        <li><button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button></li>
+        <li><button class="tablinks" onclick="openTab(event, 'CreateCharacter')">Criar Personagem</button></li>
+        <li><button class="tablinks" onclick="openTab(event, 'Trabalhos')">Trabalhos</button></li>
+        <li><button class="tablinks" onclick="openTab(event, 'Missoes')">Missões</button></li>
+        <li><button class="tablinks" onclick="openTab(event, 'Viagem')">Viagem</button></li>
+        <li><button class="tablinks" onclick="openTab(event, 'Lazer')">Lazer</button></li>
+        <li><button class="tablinks" onclick="openTab(event, 'LocalAtual')">Local Atual</button></li>
+        <li><button class="tablinks" onclick="openTab(event, 'Settings')">Configurações</button></li>
+    </ul>
 
     <div id="Home" class="tabcontent">
         <h3>Home</h3>
