@@ -74,9 +74,22 @@
             evt.currentTarget.className += " active";
         }
 
+        function saveInput() {
+            const inputValue = document.getElementById("inputField").value;
+            localStorage.setItem("inputValue", inputValue);
+        }
+
+        function loadInput() {
+            const savedValue = localStorage.getItem("inputValue");
+            if (savedValue) {
+                document.getElementById("inputField").value = savedValue;
+            }
+        }
+
         window.onload = () => {
             startTimer();
             document.getElementById("defaultOpen").click(); // Open default tab
+            loadInput(); // Load saved input value
         };
     </script>
 </head>
@@ -97,6 +110,7 @@
     <div id="Skills" class="tabcontent">
         <h3>Skills</h3>
         <p>Gerencie suas habilidades aqui.</p>
+        <input type="text" id="inputField" oninput="saveInput()" placeholder="Digite algo...">
     </div>
 
     <div id="Settings" class="tabcontent">
