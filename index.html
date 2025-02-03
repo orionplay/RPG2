@@ -59,10 +59,7 @@
         function startTimer() {
             timer = setInterval(() => {
                 ageInSeconds++;
-                const characterName = localStorage.getItem("characterName");
-                if (characterName) {
-                    document.getElementById('characterInfo').innerText = `Nome: ${characterName}, Idade: ${formatAge(ageInSeconds)}`;
-                }
+                document.getElementById('age').innerText = formatAge(ageInSeconds);
                 localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
             }, 1000);
         }
@@ -99,7 +96,7 @@
                 localStorage.setItem("characterName", name);
                 ageInSeconds = 0; // Reset age to 0
                 localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
-                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
+                document.getElementById('characterInfo').innerText = `Nome: ${name}`;
                 document.getElementById("createCharacterForm").reset();
                 document.getElementById("CreateCharacter").style.display = "none"; // Hide the Create Character tab
                 document.querySelector(".tablinks[onclick=\"openTab(event, 'CreateCharacter')\"]").style.display = "none"; // Hide the Create Character button
@@ -114,7 +111,8 @@
 
             if (name) {
                 ageInSeconds = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
-                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
+                document.getElementById('characterInfo').innerText = `Nome: ${name}`;
+                document.getElementById('age').innerText = formatAge(ageInSeconds);
             }
         }
 
@@ -155,7 +153,8 @@
         <div id="Home" class="tabcontent">
             <h3>Home</h3>
             <p>Este é um exemplo de página inicial para o seu aplicativo RPG.</p>
-            <p id="characterInfo">Nome: <span id="name"></span>, Idade: <span id="age">0 dias</span></p>
+            <p>Idade do personagem: <span id="age">0 dias</span></p>
+            <p id="characterInfo">Nome: <span id="name"></span></p>
         </div>
 
         <div id="CreateCharacter" class="tabcontent">
