@@ -38,58 +38,67 @@
     </style>
     <script>
         let timer;
-        let seconds = 0;
+        let ageInSeconds = 0;
 
         function startTimer() {
             timer = setInterval(() => {
-                seconds++;
-                document.getElementById('timer').innerText = formatTime(seconds);
+                ageInSeconds++;
+                document.getElementById('age').innerText = formatAge(ageInSeconds);
             }, 1000);
         }
 
-        function formatTime(seconds) {
-            const hrs = Math.floor(seconds / 3600);
-            const mins = Math.floor((seconds % 3600) / 60);
-            const secs = seconds % 60;
-            return `${hrs}:${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        function formatAge(seconds) {
+            const years = Math.floor(seconds / (3600 * 24 * 365));
+            const days = Math.floor((seconds % (3600 * 24 * 365)) / (3600 * 24));
+            return `${years} anos e ${days} dias`;
         }
 
         function openTab(evt, tabName) {
             let i, tabcontent, tablinks;
 
-            // Hide all tab contents
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
 
-            // Remove the active class from all tab buttons
             tablinks = document.getElementsByClassName("tablinks");
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
 
-            // Show the current tab content and add the active class to the button
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
 
-        function saveInput() {
-            const inputValue = document.getElementById("inputField").value;
-            localStorage.setItem("inputValue", inputValue);
+        function saveCharacter() {
+            const name = document.getElementById("characterName").value;
+            const age = Number(document.getElementById("characterAge").value);
+
+            if (name && age >= 0) {
+                localStorage.setItem("characterName", name);
+                localStorage.setItem("characterAge", age);
+                ageInSeconds = age * 3600 * 24 * 365;
+                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
+                document.getElementById("createCharacterForm").reset();
+            } else {
+                alert("Por favor, insira um nome válido e uma idade não negativa.");
+            }
         }
 
-        function loadInput() {
-            const savedValue = localStorage.getItem("inputValue");
-            if (savedValue) {
-                document.getElementById("inputField").value = savedValue;
+        function loadCharacter() {
+            const name = localStorage.getItem("characterName");
+            const age = localStorage.getItem("characterAge");
+
+            if (name && age) {
+                ageInSeconds = age * 3600 * 24 * 365;
+                document.getElementById('characterInfo').innerText = `Nome: ${name}, Idade: ${formatAge(ageInSeconds)}`;
             }
         }
 
         window.onload = () => {
             startTimer();
-            document.getElementById("defaultOpen").click(); // Open default tab
-            loadInput(); // Load saved input value
+            document.getElementById("defaultOpen").click();
+            loadCharacter();
         };
     </script>
 </head>
@@ -97,24 +106,32 @@
     <h1>Bem-vindo ao RPG Skill Manager</h1>
     <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button>
-        <button class="tablinks" onclick="openTab(event, 'Skills')">Skills</button>
-        <button class="tablinks" onclick="openTab(event, 'Settings')">Settings</button>
+        <button class="tablinks" onclick="openTab(event, 'CreateCharacter')">Criar Personagem</button>
+        <button class="tablinks" onclick="openTab(event, 'Settings')">Configurações</button>
     </div>
 
     <div id="Home" class="tabcontent">
         <h3>Home</h3>
         <p>Este é um exemplo de página inicial para o seu aplicativo RPG.</p>
-        <p>Tempo decorrido: <span id="timer">0:00:00</span></p>
+        <p>Idade do personagem: <span id="age">0 anos e 0 dias</span></p>
+        <p id="characterInfo"></p>
     </div>
 
-    <div id="Skills" class="tabcontent">
-        <h3>Skills</h3>
-        <p>Gerencie suas habilidades aqui.</p>
-        <input type="text" id="inputField" oninput="saveInput()" placeholder="Digite algo...">
+    <div id="CreateCharacter" class="tabcontent">
+        <h3>Criar Personagem</h3>
+        <form id="createCharacterForm" onsubmit="event.preventDefault(); saveCharacter();">
+            <label for="characterName">Nome:</label>
+            <input type="text" id="characterName" required>
+            <br>
+            <label for="characterAge">Idade Inicial (em anos):</label>
+            <input type="number" id="characterAge" required>
+            <br>
+            <button type="submit">Criar Personagem</button>
+        </form>
     </div>
 
     <div id="Settings" class="tabcontent">
-        <h3>Settings</h3>
+        <h3>Configurações</h3>
         <p>Ajuste suas configurações aqui.</p>
     </div>
 </body>
