@@ -3,205 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPG Skill Manager</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-    <style>
-        body {
-            display: flex;
-            flex-direction: row;
-        }
-        .sidebar {
-            width: 200px;
-            border-right: 1px solid #ccc;
-            padding: 10px;
-        }
-        .main-content {
-            flex-grow: 1;
-        }
-        .tab {
-            display: flex;
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-        }
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/dark.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+    <title>Progress Knight Reborn</title>
 
-        .tab button {
-            background-color: inherit;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 14px 16px;
-            transition: 0.3s;
-        }
-
-        .tab button:hover {
-            background-color: #ddd;
-        }
-
-        .tab button.active {
-            background-color: #ccc;
-        }
-
-        .tabcontent {
-            display: none;
-            padding: 6px 12px;
-            border: 1px solid #ccc;
-            border-top: none;
-        }
-    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSEZNYTL4N"></script>
     <script>
-        let timer;
-        let ageInSeconds = 0;
-        const monthNames = ["Janus", "Februs", "Marus", "Aprilus", "Maia", "Junus", "Julus", "Augustus", "Septus", "Octus", "Novus", "Decus", "Ultimus"];
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-        function startTimer() {
-            timer = setInterval(() => {
-                ageInSeconds++;
-                document.getElementById('age').innerText = formatAge(ageInSeconds);
-                localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
-            }, 1000);
-        }
-
-        function formatAge(seconds) {
-            const days = Math.floor(seconds / 86400);
-            const months = Math.floor(days / 30) % 13;
-            const years = Math.floor(days / (30 * 13));
-            const remainingDays = days % 30;
-            return `${years} anos, ${monthNames[months]} (${months + 1}) meses e ${remainingDays} dias`;
-        }
-
-        function openTab(evt, tabName) {
-            let i, tabcontent, tablinks;
-
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-
-        function saveCharacter() {
-            const name = document.getElementById("characterName").value;
-
-            if (name) {
-                localStorage.setItem("characterName", name);
-                ageInSeconds = 0; // Reset age to 0
-                localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
-                document.getElementById('characterInfo').innerText = `Nome: ${name}`;
-                document.getElementById("createCharacterForm").reset();
-                document.getElementById("CreateCharacter").style.display = "none"; // Hide the Create Character tab
-                document.querySelector(".tablinks[onclick=\"openTab(event, 'CreateCharacter')\"]").style.display = "none"; // Hide the Create Character button
-                startTimer(); // Start the timer only after character creation
-            } else {
-                alert("Por favor, insira um nome válido.");
-            }
-        }
-
-        function loadCharacter() {
-            const name = localStorage.getItem("characterName");
-            const savedAge = localStorage.getItem("characterAge");
-
-            if (name) {
-                ageInSeconds = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
-                document.getElementById('characterInfo').innerText = `Nome: ${name}`;
-                document.getElementById('age').innerText = formatAge(ageInSeconds);
-                startTimer(); // Resume the timer on page load
-            }
-        }
-
-        window.onload = () => {
-            loadCharacter();
-            document.getElementById("defaultOpen").click();
-
-            const tabList = document.querySelector(".tab");
-            new Sortable(tabList, {
-                animation: 150,
-                onEnd: function (evt) {
-                    // Handle reordering logic here if needed
-                }
-            });
-        };
+        gtag('config', 'G-VSEZNYTL4N');
     </script>
+    
 </head>
-<body>
-    <div class="sidebar">
-        <h3>Funções</h3>
-        <p>Será implementado</p>
-    </div>
+<body id="body" class="dark">
+    <div class="w3-margin"> 
+        <h1>Progress Knight - Reborn</h1>
+        <div style="width: 1220px; height: 600px">
 
-    <div class="main-content">
-        <ul class="tab">
-            <li><button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'CreateCharacter')">Criar Personagem</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'Trabalhos')">Trabalhos</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'Missoes')">Missões</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'Viagem')">Viagem</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'Lazer')">Lazer</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'LocalAtual')">Local Atual</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'Conhecimento')">Conhecimento</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'Settings')">Configurações</button></li>
-        </ul>
+            <!--******* Left-hand summary panel *******-->
+            <div class="panel w3-padding" style="width: 300px; height: auto; float: left">
+                <span id="deathText">
+                    <div style="font-size: large; color: red">Age has caught up to you</div>
+                    <div class="sidebar-element" style="color: gray">Your age has met your lifespan, use the amulet to rebirth before you pass away</div>
+                </span>
 
-        <div id="Home" class="tabcontent">
-            <h3>Home</h3>
-            <p>Este é um exemplo de página inicial para o seu aplicativo RPG.</p>
-            <p>Idade do personagem: <span id="age">0 dias</span></p>
-            <p id="characterInfo">Nome: <span id="name"></span></p>
-        </div>
+                <div class="" style="font-size: large">Age <span id="ageDisplay">14</span> Day <span id="dayDisplay">0</span></div>
+                <div class="sidebar-element" style="color: gray">Lifespan: <span id="lifespanDisplay">70</span> years</div>
+                
+                <button id="pauseButton" class="w3-button button sidebar-element" onClick="setPause()">Pause</button>
 
-        <div id="CreateCharacter" class="tabcontent">
-            <h3>Criar Personagem</h3>
-            <form id="createCharacterForm" onsubmit="event.preventDefault(); saveCharacter();">
-                <label for="characterName">Nome:</label>
-                <input type="text" id="characterName" required>
-                <br>
-                <button type="submit">Criar Personagem</button>
-            </form>
-        </div>
+                <span id="automation" class="inline" style="margin-left: 8px">
+                    <span>
+                        <div class="inline">Auto-promote</div>
+                        <input type="checkbox" class="inline" id="autoPromote">
+                    </span>
+                    <br>
+                    <span>
+                        <div class="inline">Auto-learn</div>
+                        <input type="checkbox" class="inline sidebar-element" id="autoLearn">
+                    </span>
+                </span>
 
-        <div id="Trabalhos" class="tabcontent">
-            <h3>Trabalhos</h3>
-            <p>Gerencie seus trabalhos aqui.</p>
-        </div>
+                <div style="font-size: large" id="coinDisplay">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div style="color: gray">Balance (in coins)</div>
 
-        <div id="Missoes" class="tabcontent">
-            <h3>Missões</h3>
-            <p>Gerencie suas missões aqui.</p>
-        </div>
+                <ul class="sidebar-element" style="padding-left: 20px;">
+                    <li><span style="color: rgb(9, 160, 230)">Net/day: </span ><b id="signDisplay"></b><span id="netDisplay">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span></li>
+                    <li><span style="color: green">Income/day: </span><span id="incomeDisplay">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span></li>
+                    <li><span style="color: red">Expense/day: </span><span id="expenseDisplay">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span></li>
+                </ul>
 
-        <div id="Viagem" class="tabcontent">
-            <h3>Viagem</h3>
-            <p>Gerencie suas viagens aqui.</p>
-        </div>
+                <span id="quickTaskDisplay">
+                    <div style="width: 230px" class="small-margin inline job progress-bar progressBar">
+                        <div class="progress-fill progressFill" style="background-color:rgb(225, 165, 0)"></div>
+                        <div class="progress-text name">Task</div>
+                    </div>
+                    <div class="sidebar-element" style="color: gray">Current job</div>
 
-        <div id="Lazer" class="tabcontent">
-            <h3>Lazer</h3>
-            <p>Gerencie suas atividades de lazer aqui.</p>
-        </div>
+                    <div style="width: 230px" class="small-margin skill progress-bar progressBar">
+                        <div class="progress-fill progressFill" style="background-color:rgb(225, 165, 0)"></div>
+                        <div class="progress-text name">Task</div>              
+                    </div>
+                    <div class="sidebar-element" style="color: gray">Current skill</div>
+                </span>
 
-        <div id="LocalAtual" class="tabcontent">
-            <h3>Local Atual</h3>
-            <p>Gerencie seu local atual aqui.</p>
-        </div>
+                <div style="font-size: large"><span style="color: rgb(15, 105, 207)">Happiness: </span><span id="happinessDisplay"></span></div>
+                <div style="color: gray" class="sidebar-element">Affects all xp gain</div>
 
-        <div id="Conhecimento" class="tabcontent">
-            <h3>Conhecimento</h3>
-            <p>Gerencie seus conhecimentos aqui.</p>
-        </div>
+                <span id="evilInfo">
+                    <div style="font-size: large"><span style="color: rgb(200, 0, 0)">Evil: </span><span id="evilDisplay"></span></div>
+                    <div style="color: gray" class="sidebar-element">Affects dark magic xp gain</div>
+                </span>
 
-        <div id="Settings" class="tabcontent">
-            <h3>Configurações</h3>
-            <p>Ajuste suas configurações aqui.</p>
-        </div>
-    </div>
-</body>
-</html>
+                <!--
+                <span id="scheduling">
+                    <div style="font-size: large">Scheduling</div>
+                    <div style="color: gray" class="sidebar-element">Schedule time to jobs/skills</div>
+                    <span style="height: 30px"> 
+                        <p style="width: 5px">Jobs</br>(32%)</p>
+                        <input id="schedulingSlider" class="slider" type="range" min="0" max="100" value="0">
+                        <p style="width: 5px">Skills</br>(68%)</p>
+                    </span>
+                </span>
+                -->
+
+                <span id="timeWarping">
+                    <div style="font-size: large"><span style="color: rgb(204, 34, 219)">Time warping: </span><span id="timeWarpingDisplay"></span></div>
+                    <div style="color: gray">Affects game speed</div>
+                    <button id="timeWarpingButton" class="w3-button button sidebar-element" style="margin-top: 5px; width:150px" onClick="setTimeWarping()">Enable warp</button>
+                </span>
+            </div> <!-- End left-hand summary panel -->
+            
+            <!--******* Nav-bar with tabbed content navigation buttons *******-->
+            <div class="panel w3-margin-left" style="width: 900px; height: 40px; float: left">
+                <div class="w3-button w3-bar-item tabButton" id="jobTabButton" onClick="setTab(this, 'jobs')">Jobs</div>
+                <div class="w3-button w3-bar-item tabButton" onClick="setTab(this, 'skills')">Skills</div>
+                <div class="w3-button w3-bar-item tabButton" id="shopTabButton" onClick="setTab(this, 'shop')">Shop</div>
+                <div class="w3-button w3-bar-item tabButton" id="townTabButton" onClick="setTab(this, 'town')">Town</div>
+                <div class="w3-button w3-bar-item tabButton" id="rebirthTabButton" onClick="setTab(this, 'rebirth')">Amulet</div>
+                <div class="w3-button w3-bar-item tabButton" onClick="setTab(this, 'settings')" style="float: right">Settings</div>
+            </div> <!-- End nav-bar -->
+
+            <div class="panel w3-margin-left w3-margin-top w3-padding" style="width: 900px; height: auto; float: left">
+                <template class="headerRowTaskTemplate">
+                    <tr>
+                        <th class="category" style="width: 250px">Job</th>
+                        <th>Level</th>
+                        <th class="valueType">Value type</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel">Max level</th>
+                        <th class="skipSkill">Skip</th>
+                    </tr>
+                </template>
+
+                <template class="headerRowItemTemplate">
+                    <tr>
+                        <th class="category" style="width: 250px">Item</th>
+                        <th style="width: 100px">Active</th>
+                        <th style="width: 250px">Effect</th>
+                        <th>Expense/day</th>
+                    </tr>
+                </template>
+
+                <template class="rowTaskTemplate">
+                    <tr>
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill"></div>
+                                <div class="progress-text name">Task</div>
+                                <span class="tooltipText"></span>
+                            </div>
+                        </td>
+                        <td class="level">Level</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">Xp/day</td>
+                        <td class="xpLeft">Xp left</td>
+                        <td class="maxLevel">Max level</td>
+                        <td class="skipSkill">
+                            <input class="checkbox" type="checkbox"></input>
+                        </td>
+                    </tr>
+                </template>
+
+                <template class="rowItemTemplate">
+                    <tr>
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name"></span>
+                                <span class="tooltipText">tooltip</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px;"></div>
+                            </div>
+                        </td>
+                        <td class="effect"></td>
+                        <td class="expense">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </td>
+                    </tr>
+                </template>
+
+                <template class="requiredRowTemplate">
+                    <td class="w3-text-gray" style="padding-left: 16px" colspan=5>
+                        Required: 
+                        <span class="value" colspan=5>
+                            <span class="levels"></span>
+                            <span class="coins">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil"></span>
+                        </span>
+                    </td> 
+                </template>
+
+                <!--********************************* Tab Definitions ************************************-->
+                <div class="tab" id="jobs">
+                    <table id="jobTable" class="w3-table w3-bordered">
+                    </table>
+                </div>
+
+                <div class="tab" id="skills">
+                    <table id="skillTable" class="w3-table w3-bordered">
+                    </table>
+                </div>
+
+                <div class="tab" id="shop">
+                    <table id="itemTable" class="w3-table w3-bordered">
+                    </table>
+                </div>
+
+                <div class="tab" id="town">
+                    <h4>Town</h4>
+                    <p>Your heroic feats in battle have earned you a title of nobility and a huge swath of some rather...undesirable land. 
+                        Your territory is hundreds of miles from the nearest village, the soil is infertile, and the few living beings around are bandits and hermits. It's going to 
+                        take a lot of work to make this place worth anything.
+                    </p>
+                    <p style="display: inline-block;">Town Income per day: </p>
+                    <div style="font-size: large; display: inline-block;" id="townIncomeDisplay">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <hr>
+                    <h5>Basic Buildings</h5>
+                    <div class="w3-row">
+                        <button type="button" id="woodenHut" class="w3-button w3-black w3-round-large w3-border w3-border-grey w3-quarter w3-margin-right w3-margin-bottom">
+                            Wooden Hut<span class="w3-badge w3-margin-left w3-white">0</span>
+                        </button>
+                        <button type="button" id="farm" class="w3-button w3-black w3-round-large w3-border w3-border-grey w3-quarter w3-margin-right w3-margin-bottom">
+                            Farm<span class="w3-badge w3-margin-left w3-white">0</span>
+                        </button>
+                        <button type="button" id="grainShed" class="w3-button w3-black w3-round-large w3-border w3-border-grey w3-quarter w3-margin-right w3-margin-bottom">
+                            Grain Shed<span class="w3-badge w3-margin-left w3-white">0</span>
+                        </button>
+                        <button type="button" class="w3-button w3-black w3-round-large w3-border w3-border-grey w3-quarter w3-margin-right w3-margin-bottom">
+                            Secret <span class="w3-badge w3-margin-left w3-white">0</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tab" id="rebirth">
+                    <ul>
+                        <li style="margin: 8px;">
+                            You stumble across a strange looking amulet on your 25th birthday. It does not look like
+                            it has any worth on the market given that it's made from cheap-looking copper. However, you
+                            feel a weird urge to keep the amulet, so you slip it into your pocket for safekeeping.
+                        </li>
+                        <li style="margin: 8px;" id="rebirthNote1">
+                            On your 45th birthday, you feel the amulet shiver uncontrollably in your pocket. You take it
+                            out and the constant shivering suddenly stops. More to your bizarre surprise, you notice
+                            a strange etching on the centre of the amulet.
+                        </li>
+                        <li style="margin: 8px;" id="rebirthNote2">
+                            <div style="margin-bottom: 8px">
+                                On your 65th birthday, you once again encounter the strange, unexplained shivering from your
+                                amulet. But this time, a living eyeball emerges from the centre. Although terribly frightened,
+                                you realise you do not have many years to live left anyway so you consider touching the eye
+                                to see what happens.
+                            </div>
+                            <i style="color: grey">
+                                By touching the eyeball, you will be reborn and have to restart life again, losing all your levels and coins.
+                                However, you will gain <b>xp multipliers</b> for your jobs and skills equivalent to: <b>1 + the max level of the skill or job / 10.</b>
+                                This means you will learn everything again much more quickly than you did in your previous life. <span style="color: rgb(200, 0, 0)">
+                                Something tells you that the amulet might transform even further after living for <b>2 whole centuries</b>...</span>
+                            </i>
+                            <br>
+                            <button class="w3-button button" style="margin-bottom: 8px; margin-top: 8px" onClick="rebirthOne()">Touch the eye</button>
+                            <br>
+                        </li>
+                        <li style="margin: 8px;" id="rebirthNote3">
+                            <div style="margin-bottom: 8px;">
+                                Your gut instinct was right. The moment you hit the grand age of 200, you hear an ominous hum coming from the amulet.
+                                A mouth emerges from its surface and begins to cackle, and proceeds to say: "So you've made it this far... Are you ready to embrace evil?"
+                            </div>
+                            <i style="color: rgb(200, 0, 0)">
+                                If you decide to embrace evil, all of your levels, coins and even max levels will be reset.
+                                You will be reborn as a fresh slate. However,
