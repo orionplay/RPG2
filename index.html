@@ -9,14 +9,14 @@
         body {
             display: flex;
             flex-direction: row;
-            background-color: #E2E0C8; /* Bege claro */
+            background-color: #5C7285; /* Fundo mais escuro */
             color: #000000; /* Texto preto para melhor contraste */
         }
         .sidebar {
             width: 200px;
             border-right: 1px solid #ccc;
             padding: 10px;
-            background-color: #5C7285; /* Azul acinzentado para o fundo da barra lateral */
+            background-color: #818C78; /* Verde acinzentado para o fundo da barra lateral */
         }
         .main-content {
             flex-grow: 1;
@@ -27,7 +27,7 @@
             padding: 0;
             margin: 0;
             border: 1px solid #ccc;
-            background-color: #818C78; /* Verde acinzentado para o fundo das abas */
+            background-color: #E2E0C8; /* Tom mais claro para o fundo das abas */
         }
 
         .tab button {
@@ -45,7 +45,7 @@
         }
 
         .tab button.active {
-            background-color: #818C78; /* Verde acinzentado */
+            background-color: #E2E0C8; /* Tom mais claro */
         }
 
         .tabcontent {
@@ -66,8 +66,15 @@
         }
 
         .panel {
-            background-color: #5C7285; /* Azul acinzentado para o fundo do painel */
+            background-color: #818C78; /* Verde acinzentado para o fundo do painel */
             color: #FFFFFF; /* Texto branco */
+        }
+
+        .character-name-input {
+            font-size: 1.2em;
+            padding: 5px;
+            width: 100%;
+            box-sizing: border-box;
         }
     </style>
     <script>
@@ -90,38 +97,9 @@
             return `${years} anos, ${monthNames[months]} (${months + 1}) meses e ${remainingDays} dias`;
         }
 
-        function openTab(evt, tabName) {
-            let i, tabcontent, tablinks;
-
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-
-        function saveCharacter() {
+        function saveCharacterName() {
             const name = document.getElementById("characterName").value;
-
-            if (name) {
-                localStorage.setItem("characterName", name);
-                ageInDays = 0; // Reset age to 0
-                localStorage.setItem('characterAge', ageInDays); // Save age to localStorage
-                document.getElementById('characterInfo').innerText = `Nome: ${name}`;
-                document.getElementById("createCharacterForm").reset();
-                document.getElementById("CreateCharacter").style.display = "none"; // Hide the Create Character tab
-                document.querySelector(".tablinks[onclick=\"openTab(event, 'CreateCharacter')\"]").style.display = "none"; // Hide the Create Character button
-                startTimer(); // Start the timer only after character creation
-            } else {
-                alert("Por favor, insira um nome válido.");
-            }
+            localStorage.setItem("characterName", name);
         }
 
         function loadCharacter() {
@@ -129,8 +107,11 @@
             const savedAge = localStorage.getItem("characterAge");
 
             if (name) {
+                document.getElementById('characterName').value = name;
+            }
+
+            if (savedAge) {
                 ageInDays = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
-                document.getElementById('characterInfo').innerText = `Nome: ${name}`;
                 document.getElementById('age').innerText = formatAge(ageInDays);
                 startTimer(); // Resume the timer on page load
             }
@@ -160,7 +141,6 @@
         <h1>RPG Lives</h1>
         <ul class="tab">
             <li><button class="tablinks" onclick="openTab(event, 'Home')" id="defaultOpen">Home</button></li>
-            <li><button class="tablinks" onclick="openTab(event, 'CreateCharacter')">Criar Personagem</button></li>
             <li><button class="tablinks" onclick="openTab(event, 'Trabalhos')">Trabalhos</button></li>
             <li><button class="tablinks" onclick="openTab(event, 'Missoes')">Missões</button></li>
             <li><button class="tablinks" onclick="openTab(event, 'Viagem')">Viagem</button></li>
@@ -172,17 +152,9 @@
 
         <div id="Home" class="tabcontent">
             <p>Idade do personagem: <span id="age">0 dias</span></p>
-            <p id="characterInfo">Nome: <span id="name"></span></p>
-        </div>
-
-        <div id="CreateCharacter" class="tabcontent">
-            <h3>Criar Personagem</h3>
-            <form id="createCharacterForm" onsubmit="event.preventDefault(); saveCharacter();">
-                <label for="characterName">Nome:</label>
-                <input type="text" id="characterName" required>
-                <br>
-                <button type="submit">Criar Personagem</button>
-            </form>
+            <p>
+                Nome: <input type="text" id="characterName" class="character-name-input" placeholder="Digite o nome do personagem" onblur="saveCharacterName()">
+            </p>
         </div>
 
         <div id="Trabalhos" class="tabcontent">
