@@ -53,19 +53,18 @@
     </style>
     <script>
         let timer;
-        let ageInSeconds = 0;
+        let ageInDays = 0;
         const monthNames = ["Janus", "Februs", "Marus", "Aprilus", "Maia", "Junus", "Julus", "Augustus", "Septus", "Octus", "Novus", "Decus", "Ultimus"];
 
         function startTimer() {
             timer = setInterval(() => {
-                ageInSeconds++;
-                document.getElementById('age').innerText = formatAge(ageInSeconds);
-                localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
-            }, 1000);
+                ageInDays++;
+                document.getElementById('age').innerText = formatAge(ageInDays);
+                localStorage.setItem('characterAge', ageInDays); // Save age to localStorage
+            }, 1000); // 1 second = 1 day
         }
 
-        function formatAge(seconds) {
-            const days = Math.floor(seconds / 86400);
+        function formatAge(days) {
             const months = Math.floor(days / 30) % 13;
             const years = Math.floor(days / (30 * 13));
             const remainingDays = days % 30;
@@ -94,8 +93,8 @@
 
             if (name) {
                 localStorage.setItem("characterName", name);
-                ageInSeconds = 0; // Reset age to 0
-                localStorage.setItem('characterAge', ageInSeconds); // Save age to localStorage
+                ageInDays = 0; // Reset age to 0
+                localStorage.setItem('characterAge', ageInDays); // Save age to localStorage
                 document.getElementById('characterInfo').innerText = `Nome: ${name}`;
                 document.getElementById("createCharacterForm").reset();
                 document.getElementById("CreateCharacter").style.display = "none"; // Hide the Create Character tab
@@ -111,9 +110,9 @@
             const savedAge = localStorage.getItem("characterAge");
 
             if (name) {
-                ageInSeconds = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
+                ageInDays = parseInt(savedAge, 10) || 0; // Load saved age or default to 0
                 document.getElementById('characterInfo').innerText = `Nome: ${name}`;
-                document.getElementById('age').innerText = formatAge(ageInSeconds);
+                document.getElementById('age').innerText = formatAge(ageInDays);
                 startTimer(); // Resume the timer on page load
             }
         }
